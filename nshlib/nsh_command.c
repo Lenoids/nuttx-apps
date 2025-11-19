@@ -1244,6 +1244,13 @@ int nsh_command(FAR struct nsh_vtbl_s *vtbl, int argc, FAR char *argv[])
       builtin = builtin_for_index(index);
       if (builtin != NULL)
         {
+          if (builtin->stacksize > CONFIG_NSH_STACKSIZE)
+           {
+            /* Check the stacksize of builtin. */
+            
+            nsh_error(vtbl, g_fmtcmdoutofmemory, cmd);
+            return ERROR;
+           }
           return (builtin->main)(argc, (FAR char **)argv);
         }
     }
